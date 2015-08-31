@@ -15,12 +15,20 @@
   <body>
     <div id="main">
     <button id="clearMessagesButton">Clear Messages</button>
+    <button id="fetchButton">Fetch Messages</button>
     <button id="addMessagesButton">Add Message</button>
     <button id="addRoomButton">Add Room</button>
-
+    <button id="sendMessageButton">Send Message [actually goes to database]</button>
+    
     Rooms: <div id ="roomSelect"></div>
       <h1>chatterbox</h1>
       <!-- Your HTML goes here! -->
+    </div>
+    <div class="sendMessage">
+      <form>
+        <input type="submit" id="send" value="sendIt">
+
+      </form>
     </div>
     <div id="chats">
 
