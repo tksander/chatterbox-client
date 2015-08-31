@@ -38,6 +38,7 @@ fetch: function(){
     success: function (data) {
       console.log('Got data');
       console.log(data);
+
     },
     error: function (data) {
       // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -47,7 +48,16 @@ fetch: function(){
   },
 
   clearMessages: function(){
-    $("#chats").append("<div>hi there</div>");
+    $("#chats").html("");
+  },
+
+  addMessage: function(messageObj){
+  
+    $('#chats').append("<div>"  + messageObj.text + "</div>")
+  },
+
+  addRoom: function(roomName){
+    $("#roomSelect").append("<div>" + roomName + "</div>");
   }
 
 };
@@ -56,15 +66,34 @@ fetch: function(){
 
 
 //app.send({ username: 'shawndrost', text: 'trololo', roomname: '4chan' });
-app.fetch();
 
+    var message = {
+          username: 'Mel Brooks',
+          text: 'Never underestimate the power of the Schwartz!',
+          roomname: 'lobby'
+        };
 //Click handlers
 
 $(document).ready(function(){
 
   $("#clearMessagesButton").on("click", function(){
-    $("#chats").html("")
+    $("#chats").html("");
   });
+
+  $("#addMessagesButton").on("click", function(){
+    var message = 
+         {username: 'Mel Brooks',
+          text: 'I didn\'t get a harumph outa that guy.!',
+          roomname: 'lobby'
+        }
+    app.addMessage(message);
+  });
+
+  $("#addRoomButton").on("click", function(){
+    var roomName = prompt("What's the room name?");
+    app.addRoom(roomName);
+  });
+
 
 
 });
