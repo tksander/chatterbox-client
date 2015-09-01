@@ -67,6 +67,11 @@ form input[type=text] {
 
 .chat .username {
     font-weight: 800;
+    text-decoration: underline;
+}
+.chat .username:hover {
+    color: #44c767;
+    cursor: crosshair;
 }
 
 .chat:hover {
@@ -104,4 +109,8 @@ form input[type=text] {
     position:relative;
     top:1px;
 }
-
+.chatModal{
+/*    display:none;
+*/    position: fixed;
+      background-color: grey
+}
