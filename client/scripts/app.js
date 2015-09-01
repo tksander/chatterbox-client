@@ -64,7 +64,7 @@ var drawChats = function(messageObj){
 
 var app = {
   skip: 0,
-  limit: 1000,
+  limit: 100,
   server: "https://api.parse.com/1/classes/chatterbox",
   friends: [],
   rooms: [],
@@ -228,8 +228,30 @@ $(document).ready(function(){
   })
 
   $( "#roomSelect" ).change(function() {
-    alert();
+    var theRoom = this.value;
+
+    if (theRoom === "all"){
+      //Turn on everything else
+      $("#chats .chat").css("display", "block");
+    }else{
+          $("#chats .chat").filter(function( index, element) { 
+      console.log(element.children[2].innerText);
+       // console.log($(element).children()[2]);
+
+      //return {does the elment have text not equal to theRoom}
+      //console.log($(element).find($(element).children()[2]));
+      // console.log($(element).find($(element).children()[2]).innerText);
+      return element.children[2].innerText !== theRoom;
+     }).css( "display", "none" );
+
+    }
+    
+    // return $(element).roomthing.hasClass(theRoom))
+    //hasClass(theRoom))
   });
+
+
+//$("#chats .chat")[203].children[2].innerText
 
   //Prepend the new stuff
   //append the old stuff
