@@ -55,7 +55,7 @@ var drawChats = function(messageObj){
   var template = '<div class="chat">'
   template += '<div class="text" data-text="'  + safeInput(messageObj.text) +'">' + safeInput(messageObj.text) + '</div>';
   template += '<div class="username" data-username="' +  safeInput(messageObj.username) + '">' + safeInput(messageObj.username) + '</div>'; 
-  template += '<div class="room>' + safeInput(messageObj.roomname) + '</div>';
+  template += '<div class="room">' + safeInput(messageObj.roomname) + '</div>';
   template += '<div class="timeCreated">' + messageObj.createdAt + '</div>'
   template += '</div>'
   $('#chats').prepend(template);
@@ -67,6 +67,7 @@ var app = {
   limit: 1000,
   server: "https://api.parse.com/1/classes/chatterbox",
   friends: [],
+  rooms: [],
 
   init: function(){
 
@@ -114,13 +115,29 @@ fetch: function(){
       console.log(data);
 
       for (var i = 0; i < data.results.length; i++){
-         drawChats(data.results[i]);
+         //Filter out obviously blank/ridiculous chats
+         if (data.results[i].text !== undefined && data.results[i].username !== undefined){
+           drawChats(data.results[i]);
+         }
+
+         // Filter out roomNames, add unique roomNames only
+         if(app.rooms.indexOf(data.results[i].roomname) === -1) {
+          if(data.results[i].roomname !== undefined && data.results[i].roomname !== "" && data.results[i].roomname !== null && data.results[i].roomname !== " ") {
+            app.rooms.push(data.results[i].roomname);
+          }
+         }
       }
+
+      for(var i = 0; i < app.rooms.length; i++) {
+        $("#roomSelect").append('<option value="' + safeInput(app.rooms[i]) + '">' + safeInput(app.rooms[i]) + '</option>');
+      }
+
       app.skip += 10;
     },
     error: function (data) {
       // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
-      console.error('chatterbox: Failed to retrieve messages');
+      console.error('chatterbox: Failed to retrieve message');
+      console.log(data);
     }
   });
   },
@@ -135,7 +152,7 @@ fetch: function(){
   },
 
   addRoom: function(roomName){
-    $("#roomSelect").append("<div>" + roomName + "</div>");
+    $("#roomSelect").append('<option value="' + roomName + '">' + roomName + '</option>');
   },
 
   addFriend: function(friend) {
@@ -210,6 +227,33 @@ $(document).ready(function(){
     app.handleSubmit();
   })
 
+  $( "#roomSelect" ).change(function() {
+    alert();
+  });
+
   //Prepend the new stuff
   //append the old stuff
 });
+
+//Todo:
+  //Bootstrap
+  //Peronsal messages
+  //Nice fetch-- automated
+
+// objectid| username| text| roomname| created/updated/acl| targetUser
+// where={"targetUser": {{currentuser}} 
+
+
+//INBOX
+  //Query on targetUser ===currentUser
+
+//Outbox
+  //Query on username === currentUser && targetUser is defined
+
+
+  // collect roomnames as chats are fetched - store
+    // drop down for roomnames
+      // jquery filter
+
+
+
