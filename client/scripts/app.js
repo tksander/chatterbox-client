@@ -133,6 +133,8 @@ fetch: function(){
       }
 
       app.skip += 10;
+
+      app.highlightFriends();
     },
     error: function (data) {
       // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -156,13 +158,36 @@ fetch: function(){
   },
 
   addFriend: function(friend) {
-    this.friends.push(friend);
+    if(this.friends.indexOf(friend) === -1) {
+      this.friends.push(friend);
+      $("#friendList").append('<option value="' + friend + '">' + friend + '</option>');
+      this.highlightFriend(friend);
+    }
   },
 
   handleSubmit: function() {
 
-  }
+  },
 
+  // 
+  highlightFriends: function() {
+
+    if(app.friends.length > 0) {
+      // iterate through the friends array
+      for(var i = 0; i < this.friends.length; i++) {
+        // pass that friend to jQuery to filter through the chatboxes and apply bolding style
+        $("#chats .chat").filter(function(index, element) {
+          return element.children[1].innerText === app.friends[i];
+        }).css('background-color', 'red');
+      }
+    }
+  },
+
+  highlightFriend: function(friend) {
+    $("#chats .chat").filter(function(index, element) {
+          return element.children[1].innerText === friend;
+        }).css('background-color', 'red');
+    }
 };
 
 
@@ -206,15 +231,18 @@ $(document).ready(function(){
   });
 
   $("#sendMessageButton").on("click", function(){
-    var name = prompt("whats your name?");
-    var text = prompt("Whats your message?");
-    var roomname = prompt("what's your roomname?");
+    var name = $("#modalUsername").val();
+    var text = $("#modalMessage").val();
+    var roomname = $("#modalRoomname").val();
     var message ={
       name: name,
       text: text,
       roomname: roomname
     }
     app.send(message);
+    app.addMessage(message);
+    $("#modalMessage").val("");
+    $("#modalRoomname").val("");
   });
 
   $("#chats").on("click", ".username", function() {
